@@ -1,0 +1,25 @@
+using JuMP
+using Ipopt
+
+# Membuat model optimasi
+model = Model(Ipopt.Optimizer)
+
+# Membuat variabel panjang sisi kotak (a) dan tinggi kotak (h)
+@variable(model, a >= 0)
+@variable(model, h >= 0)
+
+# Membuat konsentrasi untuk memenuhi kondisi a + h <= 6
+@constraint(model, a + h <= 6)
+
+# Membuat objek fungsi yang akan diperbesar (volume kotak)
+@objective(model, Max, a * h)
+
+# Mencari solusi optimal
+optimize!(model)
+
+# Mencetak nilai optimal dari a dan h
+println("Nilai optimal a: ", value(a))
+println("Nilai optimal h: ", value(h))
+
+# Mencetak volume maksimum yang diperoleh
+println("Volume maksimum: ", (value(a) * value(h)))
